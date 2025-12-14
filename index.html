@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoffeeTeam Pro</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/styles.css">
+  <meta name="theme-color" content="#d97706">
+</head>
+<body>
+  <!-- Welcome Screen -->
+  <div id="welcome" class="screen active">
+    <h1>ברוכים הבאים ל-CoffeeTeam</h1>
+    <p>בחרו תפקיד להתחיל</p>
+    <div class="role-buttons">
+      <button class="role-btn" data-role="cashier">קופאי</button>
+      <button class="role-btn" data-role="barista">בריסטה</button>
+      <button class="role-btn" data-role="manager">מנהל</button>
+    </div>
+  </div>
+
+  <!-- Auth Modal for Manager -->
+  <div id="auth-modal" class="modal hidden">
+    <div class="modal-box">
+      <h2>אימות מנהל</h2>
+      <input type="password" id="password-input" placeholder="הקלדו סיסמה" aria-label="סיסמה">
+      <button id="auth-btn">התחבר</button>
+    </div>
+  </div>
+
+  <!-- Name Modal -->
+  <div id="name-modal" class="modal hidden">
+    <div class="modal-box">
+      <h2>מה שמך?</h2>
+      <input type="text" id="name-input" placeholder="הקלדו שם" aria-label="שם משתמש">
+      <button id="name-btn">המשך</button>
+    </div>
+  </div>
+
+  <!-- Connection Modal (QR for P2P) -->
+  <div id="connection-modal" class="modal hidden">
+    <div class="modal-box">
+      <h2>חיבור לצוות</h2>
+      <p id="connection-text">סרקו את ה-QR בקודם כדי להתחבר</p>
+      <div id="qr-code"></div>
+      <button id="connect-btn">חבר מחדש</button>
+    </div>
+  </div>
+
+  <!-- Main App Screen -->
+  <div id="app" class="screen hidden">
+    <header class="header">
+      <div class="user-info">
+        <span id="user-name"></span>
+        <span id="role-badge"></span>
+      </div>
+      <div class="status">
+        <span id="connection-status">מחובר</span>
+      </div>
+      <button id="settings-btn" aria-label="הגדרות">⚙️</button>
+      <button id="logout-btn" aria-label="יציאה">🚪</button>
+    </header>
+
+    <!-- Cashier Interface -->
+    <div id="cashier-interface" class="role-interface hidden">
+      <div class="voice-box">
+        <button id="mic-btn" class="mic-btn" aria-label="הפעל מיקרופון">🎤</button>
+        <div id="listening-indicator" class="hidden">מאזין...</div>
+        <div id="parsed-order" class="parsed hidden"></div>
+        <button id="send-order-btn" class="send-btn hidden" disabled>שלח הזמנה</button>
+      </div>
+      <div id="recent-orders" class="orders-grid">
+        <h3>הזמנות אחרונות</h3>
+      </div>
+      <textarea id="manual-input" placeholder="הקלד הזמנה ידנית (אופציונלי)" aria-label="הקלדה ידנית"></textarea>
+    </div>
+
+    <!-- Barista Interface -->
+    <div id="barista-interface" class="role-interface hidden">
+      <div id="order-queue" class="orders-grid">
+        <h3>תור הזמנות</h3>
+      </div>
+    </div>
+
+    <!-- Manager Interface -->
+    <div id="manager-interface" class="role-interface hidden">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h4>הזמנות היום</h4>
+          <span id="today-orders">0</span>
+        </div>
+        <div class="stat-card">
+          <h4>זמן ממוצע</h4>
+          <span id="avg-time">0 דק'</span>
+        </div>
+        <div class="stat-card">
+          <h4>צוות מחובר</h4>
+          <span id="connected-team">0</span>
+        </div>
+        <div class="stat-card">
+          <h4>יעילות</h4>
+          <span id="efficiency">100%</span>
+        </div>
+      </div>
+      <div id="team-list">
+        <h3>צוות</h3>
+      </div>
+      <div id="order-history" class="orders-grid">
+        <h3>היסטוריה מלאה</h3>
+        <button id="export-csv">ייצא CSV</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Install Prompt (PWA) -->
+  <div id="install-prompt" class="hidden">
+    <p>התקינו את CoffeeTeam על מכשירכם!</p>
+    <button id="install-btn">התקן</button>
+  </div>
+
+  <!-- Scripts (load order matters) -->
+
+  <!-- טעינה ישירה של qrcode.js מ-CDN (עדכני, קל, ללא קובץ מקומי) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script src="js/storage.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/voice.js"></script>
+  <script src="js/p2p.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- פונקציית QR אמיתית (משתמשת בספרייה שטענו למעלה) -->
+  <script>
+    function generateQR(text) {
+      const div = document.getElementById('qr-code');
+      if (!div) return;
+      div.innerHTML = ''; // נקה תוכן ישן
+      new QRCode(div, {
+        text: text,
+        width: 256,
+        height: 256,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H // עמידות גבוהה יותר לסריקה
+      });
+    }
+
+    // תמיכה זמנית בחיבור ידני (לחיצה על "חבר מחדש")
+    document.addEventListener('click', (e) => {
+      if (e.target.id === 'connect-btn') {
+        const input = prompt('הדביקו כאן את נתוני ה-QR (הטקסט הארוך מבסיס64):');
+        if (input && P2P.peers.size === 0) {
+          if (App.state.role === 'cashier') {
+            P2P.handleAnswer(input);
+          } else {
+            P2P.handleOffer(input);
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
