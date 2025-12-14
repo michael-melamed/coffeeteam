@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="95" fill="#d97706" stroke="#b45309" stroke-width="3"/>
+  
+  <!-- Coffee Cup -->
+  <g transform="translate(100, 100)">
+    <!-- Cup Body -->
+    <path d="M -35 -20 L -30 30 L 30 30 L 35 -20 Z" fill="#ffffff" stroke="#78716c" stroke-width="3"/>
+    
+    <!-- Cup Handle -->
+    <path d="M 35 0 Q 55 0 55 15 Q 55 30 35 30" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+    
+    <!-- Coffee -->
+    <ellipse cx="0" cy="-18" rx="33" ry="8" fill="#92400e"/>
+    
+    <!-- Steam -->
+    <g opacity="0.7">
+      <path d="M -15 -30 Q -15 -45 -10 -50" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none">
+        <animate attributeName="d" 
+          values="M -15 -30 Q -15 -45 -10 -50;M -15 -30 Q -20 -45 -15 -50;M -15 -30 Q -15 -45 -10 -50" 
+          dur="2s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 0 -30 Q 0 -50 5 -55" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none">
+        <animate attributeName="d" 
+          values="M 0 -30 Q 0 -50 5 -55;M 0 -30 Q -5 -50 0 -55;M 0 -30 Q 0 -50 5 -55" 
+          dur="2.5s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 15 -30 Q 15 -45 20 -50" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none">
+        <animate attributeName="d" 
+          values="M 15 -30 Q 15 -45 20 -50;M 15 -30 Q 20 -45 25 -50;M 15 -30 Q 15 -45 20 -50" 
+          dur="1.8s" repeatCount="indefinite"/>
+      </path>
+    </g>
+  </g>
+  
+  <!-- Text Badge -->
+  <text x="100" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#ffffff">CoffeeTeam</text>
+</svg>

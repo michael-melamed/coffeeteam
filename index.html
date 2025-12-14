@@ -1,167 +1,259 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CoffeeTeam Pro</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="css/styles.css">
-  <meta name="theme-color" content="#d97706">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#d97706">
+    <meta name="description" content="מערכת תפעול צוותים לבתי קפה - CoffeeTeam">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CoffeeTeam">
+    
+    <title>CoffeeTeam Pro</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg">
+    <link rel="apple-touch-icon" href="assets/icons/icon.svg">
 </head>
 <body>
-  <!-- Welcome Screen -->
-  <div id="welcome" class="screen active">
-    <h1>ברוכים הבאים ל-CoffeeTeam</h1>
-    <p>בחרו תפקיד להתחיל</p>
-    <div class="role-buttons">
-      <button class="role-btn" data-role="cashier">קופאי</button>
-      <button class="role-btn" data-role="barista">בריסטה</button>
-      <button class="role-btn" data-role="manager">מנהל</button>
-    </div>
-  </div>
-
-  <!-- Auth Modal for Manager -->
-  <div id="auth-modal" class="modal hidden">
-    <div class="modal-box">
-      <h2>אימות מנהל</h2>
-      <input type="password" id="password-input" placeholder="הקלדו סיסמה" aria-label="סיסמה">
-      <button id="auth-btn">התחבר</button>
-    </div>
-  </div>
-
-  <!-- Name Modal -->
-  <div id="name-modal" class="modal hidden">
-    <div class="modal-box">
-      <h2>מה שמך?</h2>
-      <input type="text" id="name-input" placeholder="הקלדו שם" aria-label="שם משתמש">
-      <button id="name-btn">המשך</button>
-    </div>
-  </div>
-
-  <!-- Connection Modal (QR for P2P) -->
-  <div id="connection-modal" class="modal hidden">
-    <div class="modal-box">
-      <h2>חיבור לצוות</h2>
-      <p id="connection-text">סרקו את ה-QR בקודם כדי להתחבר</p>
-      <div id="qr-code"></div>
-      <button id="connect-btn">חבר מחדש</button>
-    </div>
-  </div>
-
-  <!-- Main App Screen -->
-  <div id="app" class="screen hidden">
-    <header class="header">
-      <div class="user-info">
-        <span id="user-name"></span>
-        <span id="role-badge"></span>
-      </div>
-      <div class="status">
-        <span id="connection-status">מחובר</span>
-      </div>
-      <button id="settings-btn" aria-label="הגדרות">⚙️</button>
-      <button id="logout-btn" aria-label="יציאה">🚪</button>
-    </header>
-
-    <!-- Cashier Interface -->
-    <div id="cashier-interface" class="role-interface hidden">
-      <div class="voice-box">
-        <button id="mic-btn" class="mic-btn" aria-label="הפעל מיקרופון">🎤</button>
-        <div id="listening-indicator" class="hidden">מאזין...</div>
-        <div id="parsed-order" class="parsed hidden"></div>
-        <button id="send-order-btn" class="send-btn hidden" disabled>שלח הזמנה</button>
-      </div>
-      <div id="recent-orders" class="orders-grid">
-        <h3>הזמנות אחרונות</h3>
-      </div>
-      <textarea id="manual-input" placeholder="הקלד הזמנה ידנית (אופציונלי)" aria-label="הקלדה ידנית"></textarea>
-    </div>
-
-    <!-- Barista Interface -->
-    <div id="barista-interface" class="role-interface hidden">
-      <div id="order-queue" class="orders-grid">
-        <h3>תור הזמנות</h3>
-      </div>
-    </div>
-
-    <!-- Manager Interface -->
-    <div id="manager-interface" class="role-interface hidden">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <h4>הזמנות היום</h4>
-          <span id="today-orders">0</span>
+    <!-- Loading Screen -->
+    <div id="loading" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">☕</div>
+            <div class="loading-text">CoffeeTeam</div>
+            <div class="loading-spinner"></div>
         </div>
-        <div class="stat-card">
-          <h4>זמן ממוצע</h4>
-          <span id="avg-time">0 דק'</span>
-        </div>
-        <div class="stat-card">
-          <h4>צוות מחובר</h4>
-          <span id="connected-team">0</span>
-        </div>
-        <div class="stat-card">
-          <h4>יעילות</h4>
-          <span id="efficiency">100%</span>
-        </div>
-      </div>
-      <div id="team-list">
-        <h3>צוות</h3>
-      </div>
-      <div id="order-history" class="orders-grid">
-        <h3>היסטוריה מלאה</h3>
-        <button id="export-csv">ייצא CSV</button>
-      </div>
     </div>
-  </div>
 
-  <!-- Toast Container -->
-  <div id="toast-container"></div>
+    <!-- Welcome Screen -->
+    <div id="welcome" class="screen hidden">
+        <div class="welcome-container">
+            <div class="logo">☕</div>
+            <h1 class="title">CoffeeTeam</h1>
+            <p class="subtitle">מערכת תפעול צוותים מקצועית</p>
+            
+            <div class="roles">
+                <button class="role-btn" data-role="cashier">
+                    <div class="role-icon">👨‍💼</div>
+                    <div class="role-name">קופאי</div>
+                    <div class="role-desc">קליטת הזמנות</div>
+                </button>
+                <button class="role-btn" data-role="barista">
+                    <div class="role-icon">☕</div>
+                    <div class="role-name">בריסטה</div>
+                    <div class="role-desc">הכנת משקאות</div>
+                </button>
+                <button class="role-btn" data-role="manager">
+                    <div class="role-icon">👑</div>
+                    <div class="role-name">מנהל</div>
+                    <div class="role-desc">ניהול ודוחות</div>
+                </button>
+            </div>
 
-  <!-- Install Prompt (PWA) -->
-  <div id="install-prompt" class="hidden">
-    <p>התקינו את CoffeeTeam על מכשירכם!</p>
-    <button id="install-btn">התקן</button>
-  </div>
+            <div class="install-prompt hidden" id="install-prompt">
+                <button class="btn btn-install" id="install-btn">
+                    📱 התקן כאפליקציה
+                </button>
+            </div>
 
-  <!-- Scripts (load order matters) -->
+            <div class="version">v1.0.0</div>
+        </div>
+    </div>
 
-  <!-- טעינה ישירה של qrcode.js מ-CDN (עדכני, קל, ללא קובץ מקומי) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Auth Modal (Manager) -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-box">
+            <h2 class="modal-title">🔒 כניסת מנהל</h2>
+            <input type="password" id="pwd" class="input" placeholder="סיסמה" autocomplete="off">
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="auth-btn">כניסה</button>
+                <button class="btn btn-secondary" id="auth-cancel">ביטול</button>
+            </div>
+        </div>
+    </div>
 
-  <script src="js/storage.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/voice.js"></script>
-  <script src="js/p2p.js"></script>
-  <script src="js/app.js"></script>
+    <!-- Name Modal -->
+    <div id="name-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-box">
+            <h2 class="modal-title">👋 שלום!</h2>
+            <input type="text" id="username" class="input" placeholder="מה השם שלך?" autocomplete="off">
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="name-btn">המשך</button>
+            </div>
+        </div>
+    </div>
 
-  <!-- פונקציית QR אמיתית (משתמשת בספרייה שטענו למעלה) -->
-  <script>
-    function generateQR(text) {
-      const div = document.getElementById('qr-code');
-      if (!div) return;
-      div.innerHTML = ''; // נקה תוכן ישן
-      new QRCode(div, {
-        text: text,
-        width: 256,
-        height: 256,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H // עמידות גבוהה יותר לסריקה
-      });
-    }
+    <!-- Connection Status Modal -->
+    <div id="connection-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-box">
+            <h2 class="modal-title">🔗 מתחבר...</h2>
+            <div class="connection-status">
+                <div class="spinner"></div>
+                <p id="connection-text">מחפש מכשירים ברשת...</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="connection-cancel">ביטול</button>
+            </div>
+        </div>
+    </div>
 
-    // תמיכה זמנית בחיבור ידני (לחיצה על "חבר מחדש")
-    document.addEventListener('click', (e) => {
-      if (e.target.id === 'connect-btn') {
-        const input = prompt('הדביקו כאן את נתוני ה-QR (הטקסט הארוך מבסיס64):');
-        if (input && P2P.peers.size === 0) {
-          if (App.state.role === 'cashier') {
-            P2P.handleAnswer(input);
-          } else {
-            P2P.handleOffer(input);
-          }
+    <!-- Main App -->
+    <div id="app" class="screen hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-start">
+                <div class="avatar" id="avatar">👤</div>
+                <div class="user-info">
+                    <div class="user-name" id="user-name">משתמש</div>
+                    <div class="user-role" id="user-role">תפקיד</div>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="connection-status" id="connection-status">
+                    <div class="status-dot" id="status-dot"></div>
+                    <span id="status-text">מתחבר...</span>
+                </div>
+            </div>
+            <div class="header-end">
+                <button class="icon-btn" id="refresh-btn" title="רענן">🔄</button>
+                <button class="icon-btn" id="info-btn" title="מידע">ℹ️</button>
+                <button class="icon-btn" id="logout-btn" title="יציאה">🚪</button>
+            </div>
+        </header>
+
+        <!-- Cashier Interface -->
+        <div id="cashier" class="interface hidden">
+            <div class="voice-panel">
+                <button class="mic-btn" id="mic-btn" aria-label="הקלטה">
+                    <span class="mic-icon">🎤</span>
+                </button>
+                <div class="mic-status" id="mic-status">לחץ על המיקרופון</div>
+                
+                <div class="listening-box hidden" id="listening-box">
+                    <div class="listening-header">
+                        <span class="pulse-dot"></span>
+                        <span>מאזין...</span>
+                    </div>
+                    <div class="transcript" id="transcript">...</div>
+                </div>
+
+                <div class="parsed-box hidden" id="parsed-box">
+                    <div class="parsed-header">הזמנה:</div>
+                    <div class="parsed-items" id="parsed-items"></div>
+                    <button class="btn btn-send" id="send-btn">
+                        <span>📤</span>
+                        <span>שלח הזמנה</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <span>📋</span>
+                <span>הזמנות אחרונות</span>
+                <span class="badge" id="cashier-count">0</span>
+            </div>
+            <div class="orders-grid" id="cashier-orders"></div>
+        </div>
+
+        <!-- Barista Interface -->
+        <div id="barista" class="interface hidden">
+            <div class="section-header">
+                <span>☕</span>
+                <span>תור הזמנות</span>
+                <span class="badge badge-warning" id="barista-count">0</span>
+            </div>
+            <div class="orders-grid" id="barista-orders"></div>
+            <div class="empty-state hidden" id="barista-empty">
+                <div class="empty-icon">☕</div>
+                <div class="empty-text">אין הזמנות ממתינות</div>
+            </div>
+        </div>
+
+        <!-- Manager Interface -->
+        <div id="manager" class="interface hidden">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">☕</div>
+                    <div class="stat-label">הזמנות היום</div>
+                    <div class="stat-value" id="stat-orders">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-label">זמן ממוצע</div>
+                    <div class="stat-value" id="stat-time">--:--</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-label">צוות מחובר</div>
+                    <div class="stat-value" id="stat-team">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-label">יעילות</div>
+                    <div class="stat-value" id="stat-efficiency">0%</div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <span>👥</span>
+                <span>צוות פעיל</span>
+            </div>
+            <div class="team-grid" id="team-grid"></div>
+
+            <div class="section-header">
+                <span>📈</span>
+                <span>כל ההזמנות</span>
+                <button class="btn btn-small" id="clear-history-btn">🗑️ נקה היסטוריה</button>
+            </div>
+            <div class="orders-grid" id="manager-orders"></div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/storage.js"></script>
+    <script src="js/voice.js"></script>
+    <script src="js/p2p.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('✅ SW registered'))
+                    .catch(err => console.error('❌ SW registration failed:', err));
+            });
         }
-      }
-    });
-  </script>
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('install-prompt')?.classList.remove('hidden');
+        });
+
+        document.getElementById('install-btn')?.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`Install: ${outcome}`);
+            deferredPrompt = null;
+            document.getElementById('install-prompt')?.classList.add('hidden');
+        });
+
+        window.addEventListener('appinstalled', () => {
+            console.log('✅ PWA installed');
+            deferredPrompt = null;
+        });
+    </script>
 </body>
 </html>
